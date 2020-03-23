@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="240mm"
+   height="100mm"
+   viewBox="0 0 850.3937 354.33071"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r"
+   sodipodi:docname="Red Button.svg">
+  <defs
+     id="defs4">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4194">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop4196" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop4198" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3370">
+      <stop
+         id="stop3374"
+         offset="0"
+         style="stop-color:#000000;stop-opacity:0;" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0"
+         offset="0.16112776"
+         id="stop3380" />
+      <stop
+         id="stop3372"
+         offset="1"
+         style="stop-color:#000000;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3360">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop3362" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop3364" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3360"
+       id="linearGradient3366"
+       x1="446.56848"
+       y1="716.40973"
+       x2="446.81851"
+       y2="824.9469"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(4.2935448e-7,-2.1475149e-6)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3370"
+       id="radialGradient3376"
+       cx="434.3056"
+       cy="1288.2046"
+       fx="434.3056"
+       fy="1288.2046"
+       r="424.99997"
+       gradientTransform="matrix(-0.00708213,-1.0696461,1.2149937,-0.00804031,-1127.7791,1521.4433)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4194"
+       id="linearGradient4200"
+       x1="417.15201"
+       y1="824.06134"
+       x2="426.28928"
+       y2="994.15204"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.0007846,0,0,0.99921607,-4.8255984e-8,8.1977356e-6)" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.31819805"
+     inkscape:cx="393.92068"
+     inkscape:cy="248.33186"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     showguides="false"
+     inkscape:window-width="1301"
+     inkscape:window-height="714"
+     inkscape:window-x="65"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3336"
+       spacingx="10"
+       spacingy="9.9999997" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="ButtonBase"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-698.0315)">
+    <rect
+       style="opacity:0.98799995;fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.40000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="ButtonBase"
+       width="849.99994"
+       height="349.99997"
+       x="0"
+       y="702.36224"
+       ry="170" />
+    <rect
+       ry="170"
+       y="702.36224"
+       x="-1.2847523e-05"
+       height="349.99997"
+       width="849.99994"
+       id="ButtonGlow"
+       style="opacity:0.48600003;fill:url(#radialGradient3376);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.40000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       rx="170" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:36.58819199px;line-height:125%;font-family:Verdana;-inkscape-font-specification:'Verdana, Bold';text-align:center;writing-mode:lr-tb;text-anchor:middle;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:url(#linearGradient4200);stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="425.40784"
+       y="932.09412"
+       id="textbutton"
+       sodipodi:linespacing="125%"
+       transform="scale(0.99921602,1.0007846)"><tspan
+         sodipodi:role="line"
+         id="tspan4188"
+         style="font-size:152.45080566px;fill-opacity:1;stroke:url(#linearGradient4200);stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         x="425.40784"
+         y="932.09412">BUTTON</tspan></text>
+    <path
+       style="opacity:0.98799995;fill:url(#linearGradient3366);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.40000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 204.37117,711.93048 434.88207,0 c 97.677,0 195.91015,73.76598 176.31228,124.63489 l -15.83055,0 -771.67608,0 c 0,-69.04773 78.63528,-124.63489 176.31228,-124.63489 z"
+       id="ButtonHighlight "
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="sscccs" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:30px;line-height:125%;font-family:Verdana;-inkscape-font-specification:'Verdana, Bold';text-align:center;writing-mode:lr-tb;text-anchor:middle;opacity:0.48600003;fill:#ffffff;fill-opacity:0.98823529;fill-rule:nonzero;stroke:none;stroke-width:0.40000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="247.32921"
+       y="1149.2328"
+       id="text4190"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4192"
+         x="247.32921"
+         y="1149.2328" /></text>
+  </g>
+</svg>

@@ -1,0 +1,102 @@
+body {
+	align-content: center;
+	background-color: #fff;
+}
+
+header {
+  background-color: #f9ed3e;
+  padding: 30px;
+	width: 100%;
+  text-align: center;
+  font-size: 35px;
+  color: black;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	overflow-x: hidden;
+  font-family: Cambria, "Hoefler Text", "Liberation Serif", Times, "Times New Roman", "serif"
+}
+
+ video {
+  align-content: center;
+  max-width: 100%;
+  height: auto;
+}
+
+.sidenavleft {
+  height: 100%;
+  width: 160px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #f9ed3e;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidenavleft a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #000;
+  display: block;
+}
+
+.sidenavleft a:hover {
+  color: #f1f1f1;
+}
+
+.mainleft {
+  margin-left: 160px; /* Same as the width of the sidenav */
+  font-size: 28px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+.sidenavright {
+  height: 100%;
+  width: 160px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  background-color: #f9ed3e;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidenavright a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #000;
+  display: block;
+}
+
+.sidenavright a:hover {
+  color: #f1f1f1;
+}
+
+.mainright {
+  margin-right: 160px; /* Same as the width of the sidenav */
+  font-size: 28px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+.row-centered {
+    text-align:center;
+}
+.col-centered {
+	margin-top: 150px;
+    display:inline-block;
+    float:none;
+    margin-right:-4px;
+    text-align: center;
+    background-color: #ccc;
+    border: 1px solid #ddd;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}

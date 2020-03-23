@@ -1,0 +1,114 @@
+{
+"questions":[{
+    "question": "Who invented the C++ programming language?",
+    "answers" : [{
+        "a" : "Arthur O'Dwyer",
+        "b" : "Rodger Cadenhead",
+        "c" : "Jessie Letherhead",
+        "d" : "Bjarne Stroustrup"
+    }],
+    "correct" : "d"
+},
+{"question": "Bootstrap was invented by what socail neworking company?",
+
+    "answers" : [{
+        "a" : "Facebook",
+        "b" : "Snapchat",
+        "c" : "Twitter",
+        "d" : "Linkedin"
+    }],
+    "correct": "c"
+    },
+{
+"question": "Who invented the Three.js?",
+"answers" : [{
+    "a" : "Kevin Macleod",
+    "b" : "Ricardo Cabello",
+    "c" : "Soledad Penadés",
+    "d" : "Brendan Eich"
+}],
+
+"correct" : "b"
+},
+{
+    "question": "Rosenbrock function are associated with which shape?",
+    "answers" : [{
+        "a" : "Bowl",
+        "b" : "Bell",
+        "c" : "Sphere",
+        "d" : "Bannana"
+    }],
+    "correct": "d"
+},
+
+{"question": "If (7e + 5)/e = 26/3, then the value of 'e' is?",
+
+    "answers" : [{
+        "a" : "5",
+        "b" : "7",
+        "c" : "3",
+        "d" : "4"
+    }],
+    "correct": "c"
+    },
+
+{"question": "Which algebra specification implements associativity law",
+
+"answers" : [{
+    "a" : "Setoids",
+    "b" : "Semigroups",
+    "c" : "Monoids",
+    "d" : "Functors"
+}],
+"correct": "b"
+}
+,
+{"question": "Which Theorem can be used to reverse conditional probabilites",
+
+"answers" : [{
+    "a" : "Bayes Theorem",
+    "b" : "Central Limit Theorem",
+    "c" : "Cramers Theorem",
+    "d" : "Jackson Theorem"
+}],
+"correct": "a"
+}
+,
+
+    {"question": "Who is coined the CQRS pattern?",
+
+        "answers" : [{
+            "a" : "Cris Sawyer",
+            "b" : "Greg Young",
+            "c" : "Dan Bunten",
+            "d" : "Tim Schafer"
+        }],
+        "correct": "b"
+        },
+        {"question": "A category is said to be of what type?",
+
+            "answers" : [{
+                "a" : "Disjoint",
+                "b" : "Intersection",
+                "c" : "Aggregated",
+                "d" : "Union"
+            }],
+            "correct": "d"
+            },
+            
+
+        {"question": "Who published the first book the first book on recreational mathematics, Problèmes Plaisants in 1612",
+
+            "answers" : [{
+                "a" : "Descartes",
+                "b" : "De Morgan",
+                "c" : "Euler",
+                "d" : "Bachet"
+            }],
+            "correct": "d"
+            }
+    
+
+]
+
+}
