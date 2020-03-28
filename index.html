@@ -97,7 +97,10 @@
 		<div id="overlay">
 			<div>
                 <form>
-                    Your Name   <input type="text" name="username" id="username"></input></form>
+                    Your Name   <input type="text" name="username" id="username"></input>  <br>
+                    Your Email   <input type="text" name="email" id="email"></input>
+                
+                
                 </form>
 				<button id="startButton">Click to Play</button>
 				
@@ -688,14 +691,14 @@ return this.data;
 
         }
         function removeGui(){
-            console.log(scene);
+            
             var elem = scene.getObjectByName("gui_question", true);
             scene.remove(elem);
             scene.remove(scene.getObjectByName("button_a"));
             scene.remove(scene.getObjectByName("button_b"));
             scene.remove(scene.getObjectByName("button_c"));
             scene.remove(scene.getObjectByName("button_d"));
-            console.log(scene);
+         
         }
         function clearScene(){
             while(scene.children.length > 0){ 
