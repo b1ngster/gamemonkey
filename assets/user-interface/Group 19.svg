@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="794" height="297" viewBox="0 0 794 297">
+  <defs>
+    <filter id="Path_9" x="0" y="110.176" width="383.463" height="101.777" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_19" data-name="Group 19" transform="translate(-1613.5 -349.5)">
+    <rect id="Rectangle_11" data-name="Rectangle 11" width="780" height="97" rx="19" transform="translate(1625 352)" fill="#fff" stroke="#092533" stroke-width="5"/>
+    <g transform="matrix(1, 0, 0, 1, 1613.5, 349.5)" filter="url(#Path_9)">
+      <path id="Path_9-2" data-name="Path 9" d="M15.119,0H345.344a15.119,15.119,0,0,1,15.119,15.119V63.658a15.119,15.119,0,0,1-15.119,15.119H15.119A15.119,15.119,0,0,1,0,63.658V15.119A15.119,15.119,0,0,1,15.119,0Z" transform="translate(11.5 118.68)" fill="#f5454b" stroke="#fff" stroke-linecap="square" stroke-width="5"/>
+    </g>
+    <rect id="Rectangle_14" data-name="Rectangle 14" width="361" height="77" rx="19" transform="translate(1625 567)" fill="#092533" stroke="#fff" stroke-width="5"/>
+    <rect id="Rectangle_15" data-name="Rectangle 15" width="361" height="77" rx="19" transform="translate(2044 567)" fill="#092533" stroke="#fff" stroke-width="5"/>
+    <rect id="Rectangle_13" data-name="Rectangle 13" width="361" height="79" rx="19" transform="translate(2044 468)" fill="#092533" stroke="#fff" stroke-width="5"/>
+    <path id="Path_8" data-name="Path 8" d="M921.185,579.5h62.407" transform="translate(1062.834 25.938)" fill="none" stroke="#fff" stroke-width="5"/>
+    <path id="Path_7" data-name="Path 7" d="M921.185,579.5H982" transform="translate(1064.425 -71.936)" fill="none" stroke="#fff" stroke-width="5"/>
+  </g>
+</svg>
