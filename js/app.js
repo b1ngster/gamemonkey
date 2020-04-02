@@ -243,13 +243,13 @@
               // create an array containing all objects in the scene with which the ray intersects
               var intersects = raycaster.intersectObjects( scene.children );
   
-         console.log(intersects);
          // Handle button clicks
               if (intersects.length>0){
       
   
       if(intersects[0].object.name == "button_a" | "buttonA_text"){
           
+        clearScene();
          Quiz("a")
       }
       if(intersects[0].object.name == "button_b"| "buttonB_text"){
@@ -281,8 +281,9 @@
                   }
               if(video.ended && intro_complete == 1){
                   intro_complete = 2;
-                  console.log(scenes);
-                  clearScene();
+
+                
+                clearScene(video);
                   Quiz(scenes["1"].question);
               }
           
@@ -335,10 +336,10 @@
             }
   
             if(questionBank){
-                console.log(questionBank);
+
             var QBank = questionBank.questions[user.current_question]
             
-            console.log(QBank);
+            
            
             var answer = QBank.correct;
             if( answer != undefined)
@@ -369,7 +370,7 @@
               
               }else{
                   removeGui();
-                  clearScene();
+                // clearScene();
                   videopath = "videos/questions/fail.mp4"
                   var video = renderVideo(videopath);
                  
@@ -442,11 +443,9 @@
               .substr(-1) !== 'd'){
                  console.log('incorrect');
              }else{
-                 console.log('correct')
              }
              // user.current_question++;
             //  user.current_video++;
-              console.log(user);
              
             }
             */
@@ -507,7 +506,7 @@
   
           function createText(text, x, y){
            
-            console.log(x, y);
+           
                       var loader = new THREE.FontLoader();
   
                   loader.load( 'js/fonts/helvetiker_bold.typeface.json', function ( font ) {
@@ -649,8 +648,6 @@
                   var score_pad = 20;
                   score_mesh_x = window.innerWidth / 20 * -9;
                   
-                  console.log('mesh x');
-                    console.log(score_mesh_x);
                   score_mesh[1] = createTextMesh('1000', 'white', score_mesh_x, score_mesh_bttm, texture_gradient );
                   score_mesh[2] = createTextMesh('2,000', 'white', score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
                   score_mesh[3] = createTextMesh('3,000', 'white', score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
@@ -676,9 +673,7 @@
   
                   var material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
   
-  
-  
-                  var lifeline_1 = new THREE.Mesh( geometry, material );
+                    var lifeline_1 = new THREE.Mesh( geometry, material );
                   lifeline_1.position.set(260, 150, 20);
                   scene.add( lifeline_1 );
   
@@ -689,10 +684,9 @@
                   var lifeline_3 = new THREE.Mesh( geometry, material );
                   lifeline_3.position.set(200, 150, 20);
                   scene.add( lifeline_3 );
-                          
-                          
-  
-          }
+                }
+
+
           function removeGui(){
               
               var elem = scene.getObjectByName("gui_question", true);
@@ -704,11 +698,14 @@
            
           }
           function clearScene(){
+             
               for( i = 0; i < scene.children.length; i++){ 
                   console.log(scene.children[i])
                scene.remove(scene.children[i]); 
-  }
+            }
+            if(scene.children[0]){
+                clearScene();
           }
-  
+        }
         
   
