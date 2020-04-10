@@ -1,6 +1,109 @@
 {
 "questions":[{
-    "question": "Who invented the C++ programming language?",
+
+    "question": "Which football team plays its games at St James Park?",
+    
+
+    "answers" : [{
+        "a" : "Everton",
+        "b" : "West Ham",
+        "c" : "Aston Villa",
+        "d" : "Newcastle United"
+    }],
+    "correct" : "d",
+    "videos": [{"question":"videos/questions/lewis/00049.mp4",
+            "correct_vid": "videos/questions/lewis/00049.mp4",
+            "incorrect_vid": "videos/questions/lewis/00049.mp4"  }]
+},
+{
+
+    "question": "In the phonetic alphabet which word represents I?",
+  
+    "answers" : [{
+        "a" : "Igloo",
+        "b" : "Interm",
+        "c" : "Inca",
+        "d" : "India"
+    }],
+    "correct" : "a",
+    "videos": [{"question":"videos/questions/lewis/00054.mp4",
+        "correct_vid": "videos/questions/lewis/00049.mp4",
+        "incorrect_vid": "videos/questions/lewis/00049.mp4"  }]
+},
+{
+
+    "question": "Who invented penacilin?",
+  
+    "answers" : [{
+        "a" : "Alexander Flemming",
+        "b" : "Thomas Eddison",
+        "c" : "John Logi Bear",
+        "d" : "Nicholas tesla"
+    }], 
+    "correct" : "a",
+    "videos": [{"question":"videos/questions/lewis/00051.mp4",
+        "correct_vid": "videos/questions/lewis/00049.mp4",
+        "incorrect_vid": "videos/questions/lewis/00049.mp4"  }]
+},
+{
+"question": "What is the name for a group of dolphins?",
+  
+"answers" : [{
+    "a" : "Pod",
+    "b" : "Heard",
+    "c" : "School",
+    "d" : "Mob"
+}],
+"correct" : "a",
+"videos": [{"question":"videos/questions/lewis/00052.mp4",
+    "correct_vid": "videos/questions/lewis/00049.mp4",
+    "incorrect_vid": "videos/questions/lewis/00049.mp4"  }]
+},
+{
+"question": "How many men have walked on the moon?",
+  
+"answers" : [{
+    "a" : "8",
+    "b" : "10",
+    "c" : "12",
+    "d" : "14"
+}],
+"correct" : "c",
+"videos": [{"question":"videos/questions/lewis/00055.mp4",
+    "correct_vid": "videos/questions/lewis/00049.mp4",
+    "incorrect_vid": "videos/questions/lewis/00049.mp4"  }]
+},
+{
+    "question": "How many people have been presidents of USA?",
+      
+    "answers" : [{
+        "a" : "42",
+        "b" : "44",
+        "c" : "45",
+        "d" : "47"
+    }],
+    "correct" : "v",
+    "videos": [{"question":"videos/questions/lewis/00056.mp4",
+        "correct_vid": "videos/questions/lewis/00049.mp4",
+        "incorrect_vid": "videos/questions/lewis/00049.mp4"  }]
+    },
+
+    {
+        "question": "What is the current currency of Brazil?",
+          
+        "answers" : [{
+            "a" : "Dollar",
+            "b" : "Peso",
+            "c" : "Escodo",
+            "d" : "Real"
+        }],
+        "correct" : "d",
+        "videos": [{"question":"videos/questions/lewis/00058.mp4",
+            "correct_vid": "videos/questions/lewis/00049.mp4",
+            "incorrect_vid": "videos/questions/lewis/00049.mp4"  }]
+        },
+       
+{    "question": "Who invented the C++ programming language?",
     "answers" : [{
         "a" : "Arthur O'Dwyer",
         "b" : "Rodger Cadenhead",
@@ -94,21 +197,10 @@
                 "d" : "Union"
             }],
             "correct": "d"
-            },
+            }
             
 
-        {"question": "Who published the first book the first book on recreational mathematics, Problèmes Plaisants in 1612",
-
-            "answers" : [{
-                "a" : "Descartes",
-                "b" : "De Morgan",
-                "c" : "Euler",
-                "d" : "Bachet"
-            }],
-            "correct": "d"
-            }
+  
     
+      ] }     
 
-]
-
-}
