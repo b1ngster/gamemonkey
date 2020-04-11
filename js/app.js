@@ -318,9 +318,9 @@
   
   
           function animate() {
-              render();
+            
               update();
-              
+              render();
           requestAnimationFrame(animate);
           }
           var intro_complete = 0;
@@ -328,8 +328,9 @@
           function update() {
           
             if(video.ended){
-                console.log(video);
-                sequence.next(video);
+           
+               
+                   sequence.next(video);
               //  console.log(ended)
            
             }
@@ -526,6 +527,8 @@
             */
         
            if( user.current_question === 1 ){
+
+            console.log('user question check 1')
            
            
             
@@ -548,7 +551,7 @@
       
   
           function renderVideo(videopath){
-   console.log("rendering video " + videopath);
+   console.log("rendering video check 2 " + videopath);
 
            //   video.pause();
            if(video.ended){

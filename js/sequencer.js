@@ -5,9 +5,12 @@
                     
                     var speed = 2; //units a second
                     var delta = 0;
-                    
+                    var item_clock = 0;
                     var urls = [];
+                    var finished = false;
                     var clock =  new THREE.Clock();
+                    var itemIndex = 0;
+                    var countdownTimer;
                     this.add = function (item, start, end, init, scene) {
 
                       //  console.log(item);
@@ -15,16 +18,23 @@
                         item.id = Math.random().toString(36).substr(2, 9);
                         item._active = false;
                         item._start = start;
+                        
                         item._duration = end - start;
                         item._end = end;
+                        item.timer;
                         item._scene = scene;
                         item._init = init;
+                        item._first = true;
+                        
                         if (typeof item.init == 'function') {
                            // item.init();
                         }
-                       
+                        
+                        
                         if(item.videos !== undefined){
                             
+
+                            //remove duplicates to create an array loaded values
                             const duplicates = (e, i, arr) => arr.indexOf(e) === i
                             item.videos.forEach((link)=>{
                                
@@ -40,8 +50,10 @@
                         //console.log(urls)
                         _items.push(item);
                         _items.sort(function (a, b) { return a.__start - b.__start; });
-                        _itemsToRemove.push(item);
-                        _itemsToRemove.sort(function (a, b) { return a.__end - b.__end; });
+                     
+                      //  _itemsToRemove.sort(function (a, b) { return a.__end - b.__end; });
+                        
+                   
                     };
                     this.get = function () {
                         return this;
@@ -50,49 +62,80 @@
                         return urls;
                     }
 
+                    this.createItem = function(item){
+
+                        console.log(item);
+                        _itemsToRemove.push(item);
+                      
+                        if(item['videos']){
+                        
+                           video =  renderVideo(item['videos'][0]['question'])
+                        }
+                         else{
+                        
+                        renderVideo('videos/CountdownTimer.mp4');
+                            
+                           }
+                          item.start = performance.now();
+                         ++_currentItem;
+                         renderButtons(item['question'], item['answers']);
+                         return this;
+                        
+                    }
+                    this.coundown = function () {
+                        renderVideo('videos/CountdownTimer.mp4');
+                    };
                     this.getItems = function () {
                         return _items;
                     };
+                 
+                    this.checkTime = function(){
+                       return clock - performance.now() / 1000;
+                    }
+
+                    this.finished = function (){
+                        
+                    }
+                    
                     this.next = function (video) {
                       
-                        console.log('lapesed time', clock.getElapsedTime());
-
-                      
-                        removeGui();
-                        clearScene();
-                       
-                        
+                       //console.log()
                         item = _items[_currentItem];
                         
+                      //  removeGui();
+                     //   
                        
-                      // console.log(video);
-                       if(item['videos']){
-                           console.log(item);
+                        if(_currentItem === 0){
+                        this.createItem(item);
+                        }
                       
-                      video =  renderVideo(item['videos'][0]['question'])
+                        
+                        console.log(this.getClockTime(item))
+                      
+                      
+                      
+                        if(  item.finished){
 
-                         
+                        
+                    console.log('item finished');
+                        if(item.first === true||this.checkTime > 30){
+                        this.createItem(item);
+                        item.first = false;
                         }
-                        else{
-                       
-                       renderVideo('videos/CountdownTimer.mp4');
-
-                        }
-                    
+                
+                    }
+                  
                        //video.load(); // must call after setting/changing source
-                    
-                       renderButtons(item['question'], item['answers']);
-                       renderButtons(item['question'], item['answers']);
-
+                      // item.clock = this.clockStart();
+                       
                      
                       // video.play();
-                       //console.log(clock.runtTime());
-                        return ++_currentItem;
                     };
-                    this.startTime = function(){
-                    var time = new THREE.Clock();
 
-                    }
+
+                
+                   
+
                     this.current = function () {
                         return _currentItem;
                     };
@@ -100,10 +143,15 @@
                         return ++_currentItemVideo;
                     };
                     this.clockStart = function(){
-                        clock.start();
+                        clock = performance.now();
                     }
                     this.getClockTime = function(){
-                        return clock;
+                    var t  =  performance.now() - clock;
+
+                      return  t
+                    }
+                    this.finished = function(){
+                        console.log(this.getClockTime);
                     }
                     this.currentVideo = function () {
 

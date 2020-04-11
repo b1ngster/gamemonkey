@@ -1,111 +1,134 @@
-class Stopwatch {
-    constructor(display, results) {
-      this.running = false;
-      this.canvas = document.createElement;
-      this.results = results;
-      this.laps = [];
-      this.reset();
-      this.print(this.times);
-    }
-  
-    reset() {
-      this.times = [0, 0, 0];
-    }
-  
-    start() {
-      if (!this.time) this.time = performance.now();
-      if (!this.running) {
-        this.running = true;
-        requestAnimationFrame(this.step.bind(this));
-      }
-    }
-  
-    lap() {
-      let times = this.times;
-      let canvas = document.createElement("canvas");
-      let ctx = canvas.getContext('2d');
-      
-    ctx.font = 'bold ' + canvas.width / 4 + 'px sans-serif';
+// performance.now() shim
+window.performance = window.performance || {};
+performance.now = (function() {
+  return performance.now       ||
+         performance.mozNow    ||
+         performance.msNow     ||
+         performance.oNow      ||
+         performance.webkitNow ||
+         function() { return Date.now(); };
+})();
 
-    var dim = ctx.measureText(timeString);
-
-    var y = (canvas.height - 30) / 2;
-    var x = (canvas.width - dim.width) / 2;
-
-    ctx.fillText(timeString, x, y); 
+/**
+ * A timer.
+ *
+ * Adapted from the
+ * [three.js clock](https://github.com/mrdoob/three.js/blob/master/src/core/Clock.js).
+ *
+ * If you only care about how long something takes (e.g. when testing
+ * performance) and you don't need to stop the timer, Timer#event() and
+ * Timer#getTimeSince() are more efficient than instantiating a new Timer
+ * object.
+ *
+ * @param {Boolean} [autoStart=true]
+ *   Whether to start the timer immediately upon instantiation or wait until
+ *   the Timer#start() method is called.
+ */
+function Timer(autoStart) {
+  this.autoStart = typeof autoStart === 'undefined' ? true : autoStart;
+  this.lastStartTime = 0;
+  this.lastDeltaTime = 0;
+  this.elapsedTime = 0;
+  this.running = false;
+  /**
+   * Get the time elapsed in seconds since the last time a delta was measured.
+   *
+   * Deltas are taken when the timer starts or stops or elapsed time is
+   * measured.
+   *
+   * Note that if the timer is stopped and autoStart is on, calling this method
+   * will start the timer again.
+   */
+  this.getDelta = function() {
+    var diff = 0;
+    if (this.running) {
+      var now = performance.now();
+      diff = (now - this.lastDeltaTime) / 1000; // ms to s
+      this.lastDeltaTime = now;
+      this.elapsedTime += diff;
     }
-  
-    stop() {
-      this.running = false;
-      this.time = null;
+    return diff;
+  };
+  /**
+   * Start the timer.
+   */
+  this.start = function() {
+    if (this.running) {
+      return;
     }
-  
-    restart() {
-      if (!this.time) this.time = performance.now();
-      if (!this.running) {
-        this.running = true;
-        requestAnimationFrame(this.step.bind(this));
-      }
-      this.reset();
-    }
-  
-    clear() {
-      clearChildren(this.results);
-    }
-  
-    step(timestamp) {
-      if (!this.running) return;
-      this.calculate(timestamp);
-      this.time = timestamp;
-      this.print();
-      requestAnimationFrame(this.step.bind(this));
-    }
-  
-    calculate(timestamp) {
-      var diff = timestamp - this.time;
-      // Hundredths of a second are 100 ms
-      this.times[2] += diff / 10;
-      // Seconds are 100 hundredths of a second
-      if (this.times[2] >= 100) {
-        this.times[1] += 1;
-        this.times[2] -= 100;
-      }
-      // Minutes are 60 seconds
-      if (this.times[1] >= 60) {
-        this.times[0] += 1;
-        this.times[1] -= 60;
-      }
-    }
-  
-    print() {
-
-      
-    var y = (canvas.height - 30) / 2;
-    var x = (canvas.width - dim.width) / 2;
-
-    ctx.fillText( this.format(this.times), x, y); 
-    }
-  
-    format(times) {
-      return `\
-  ${pad0(times[0], 2)}:\
-  ${pad0(times[1], 2)}:\
-  ${pad0(Math.floor(times[2]), 2)}`;
-    }
+    this.lastStartTime = this.lastDeltaTime = performance.now();
+    this.running = true;
+  };
+  /**
+   * Stop the timer.
+   */
+  this.stop = function () {
+    this.elapsedTime += this.getDelta();
+    this.running = false;
+  };
+  /**
+   * Get the amount of time the timer has been running, in seconds.
+   */
+  this.getElapsedTime = function() {
+    this.getDelta();
+    return this.elapsedTime;
+  };
+  if (this.autoStart) {
+    this.start();
   }
-  
-  function pad0(value, count) {
-    var result = value.toString();
-    for (; result.length < count; --count) result = "0" + result;
-    return result;
+}
+
+(function() {
+  var events = {}, noID = 0;
+  /**
+   * Register the time at which an event occurred.
+   *
+   * If you only care about how long something takes (e.g. when testing
+   * performance) and you don't need to stop the timer, Timer#event() and
+   * Timer#getTimeSince() are more efficient than instantiating a new Timer
+   * object.
+   *
+   * @param {String} [id]
+   *   An identifier for the event.
+   * @static
+   */
+  Timer.event = function(id) {
+    if (typeof id === 'undefined') {
+      noID = performance.now();
+    }
+    else {
+      events[id] = performance.now();
+    }
+  };
+  /**
+   * Return the time since an event occurred.
+   *
+   * If you only care about how long something takes (e.g. when testing
+   * performance) and you don't need to stop the timer, Timer#event() and
+   * Timer#getTimeSince() are more efficient than instantiating a new Timer
+   * object.
+   *
+   * @param {String} [id] An identifier for the event.
+   * @return {Number} Seconds since the event, or 0 if the event is not found.
+   * @static
+   */
+  Timer.getTimeSince = function(id) {
+    var startTime = typeof events[id] === 'undefined' ? noID : events[id];
+    return startTime ? (performance.now() - startTime) / 1000 : 0;
+  };
+  /**
+   * Get the average amount of time required to run the specified function.
+   *
+   * @param {Function} callback The function to measure.
+   * @param {Number} iterations The number of times to run the function.
+   * @return {Number} The mean number of seconds the function took to run.
+   * @static
+   */
+  Timer.getMeanExecutionTime = function(callback, iterations) {
+    Timer.event('profile');
+    while (iterations--) {
+      callback();
+    }
+    return Timer.getTimeSince('profile') / iterations;
   }
-  
-  function clearChildren(node) {
-    while (node.lastChild) node.removeChild(node.lastChild);
-  }
-  
-  let stopwatch = new Stopwatch(
-    document.querySelector(".stopwatch"),
-    document.querySelector(".results")
-  );
-  
+})();
