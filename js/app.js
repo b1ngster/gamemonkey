@@ -58,27 +58,17 @@
   
             var  user = { username: "",
                           current_question: 0,
-                          current_video: 1,
+                          current_video: 0,
                           score: 0,
                           answers: []
                           }
          
-    // FUNCTIONS
-  
-    var scenes = {
-  
-  "1" : { 
-  question: 'assets/question_1/countdown.mp4',
-  answer_a: 'assets/question_1/A.ogv',
-  answer_b: 'assets/question_1/B.ogv',
-  answer_c: 'assets/question_1/C.ogv',
-  answer_d: 'assets/question_1/D.ogv'
-  }
-  };
-  
+   
   
   // http://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
   function shuffle(array) {
+
+    console.log(array)
     var currentIndex = array.length
       , temporaryValue
       , randomIndex
@@ -114,7 +104,6 @@
   };
   xobj.send(null);  
   }
-  var questi;
    async function get_questions() {
         var json;
         var data = function(){
@@ -160,8 +149,10 @@
   
               scene = new THREE.Scene();
             var texture_gradient = new THREE.TextureLoader().load('assets/user-interface/button.png');
+            
+            console.log(data);
             data = shuffle(data)
-        //   console.log(data);
+           console.log(data);
            
             for (let index = 0; index < data.length; index++) {
 
@@ -193,11 +184,9 @@
               
     
                   window.addEventListener( 'click', handleUserInput, false );
-            
-        
                   window.addEventListener('resize', handleResize, false);
-              //camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-               camera =     new THREE.OrthographicCamera(window.innerWidth / -2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / -2, 1, 500);
+                  //camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+                  camera =     new THREE.OrthographicCamera(window.innerWidth / -2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / -2, 1, 500);
    
               // RENDERER
   
@@ -233,6 +222,7 @@
               
             
               videoImage = document.createElement('canvas');
+              videoImage.id = "video_canvas"
               videoImage.width = 1920;
               videoImage.height = 1080;
   
@@ -255,12 +245,7 @@
               video.play();
               sequence.preload();
              
-                //    intro_complete = 2;
-                    //video.removeAttribute('src'); // empty source
-                    //video.load();
-                    //video.remove();
-                    //clearScene()
-                 //   Quiz(scenes["1"].question);
+           
             
               camera.position.set(0, 0, 300);
               camera.lookAt(movieScreen.position);
@@ -269,20 +254,11 @@
   
           }
         
-        function MovieScreen(){
-
-
-
-        }
-
-
-
-        
           
           function handleUserInput (e){
   
               e.preventDefault();
-             
+              e.preventP
               var mouseVector = new THREE.Vector3(
                   ( e.clientX / window.innerWidth ) * 2 - 1,
               - ( e.clientY / window.innerHeight ) * 2 + 1,
@@ -298,19 +274,22 @@
          // Handle button clicks
               if (intersects.length>0){
       
-  
+                console.log(intersects[0].object.name)
       if(intersects[0].object.name == "button_a" | "buttonA_text"){
-          
+        intersects[0].object.color = 0xFF0022;
          Quiz("a")
       }
       if(intersects[0].object.name == "button_b"| "buttonB_text"){
+        intersects[0].object.color = 0xFF0022;
           Quiz("b")
       }
       if(intersects[0].object.name == "button_c"| "buttonC_text"){
           Quiz("c")
+          intersects[0].object.color = 0xFF0022;
       }
       if(intersects[0].object.name == "button_d"| "buttonD_text"){
           Quiz("d")
+          intersects[0].object.color = 0xFF0022;
       }
   
   }
@@ -335,18 +314,7 @@
            
             }
                 
-          //    if(intro_complete == 0){
-          //        intro_complete= 1;
-              //    }
-                
-             // if(video.ended && intro_complete == 1){
-              //    intro_complete = 2;
-                  //video.removeAttribute('src'); // empty source
-                  //video.load();
-                  //video.remove();
-                  //clearScene()
-               //   Quiz(scenes["1"].question);
-             // }
+        
           
   
               //controls.update();
@@ -389,14 +357,15 @@
             //  console.log(value);
             //});
               
-         
+             console.log(sequence.handleClick(button_clicked));
+             /*
             user.current_question =0
             console.log(user);
             if(user.current_question == 0){
            // clearScene();
             videopath = "videos/rules_scene.mp4";
              video = renderVideo(videopath);
-              
+            /*  
           video.addEventListener("ended", videoEnded); 
   
               function videoEnded(){
@@ -406,7 +375,7 @@
             user.current_question++
              
         }
-              console.log(user)
+         //     console.log(user)
             
                
             }
@@ -507,7 +476,7 @@
              }else{
                  console.log('correct')
              }
-            // user.current_question++;
+            // 
              //user.current_video++;
             
             }
@@ -532,9 +501,9 @@
            
            
             
-           renderVideo(user.current_video);
+           //renderVideo(user.current_video);
            }
-           renderButtons(user.current_video);
+         //  renderButtons(user.current_video);
             /*
             
       
@@ -551,14 +520,21 @@
       
   
           function renderVideo(videopath){
-   console.log("rendering video check 2 " + videopath);
+  console.log("rendering video check 2 " + videopath);
 
-           //   video.pause();
+       //    console.trace();
+          
            if(video.ended){
-              video.src = videopath;
-              video.load(); // must call after setting/changing source
+             console.log(this.previous);
+             video.removeAttribute('src');
+            video.load();
+              video.setAttribute( "src", videopath);
+              video.load();
+               // must call after setting/changing source
              video.play();
-              
+             if(video.ended){
+              video.load();
+             }
               videoImage = document.createElement('canvas');
               videoImage.width = 1920;
               videoImage.height = 1080;
@@ -579,9 +555,10 @@
               var movieScreen = new THREE.Mesh(movieGeometry, movieMaterial);
               movieScreen.position.set(0, 10, 0);
               scene.add(movieScreen);
-           }
+            }
               //video.play();
               return video;
+            
           }
   
   
@@ -608,6 +585,7 @@
                   } );
               var textMesh = new THREE.Mesh( textGeo, textMaterial );
                   textMesh.name = name;
+                  console.log(name);
                    textMesh.position.set(x - textWidth / 2, y , 42);
                   
                   scene.add(textMesh);
@@ -747,19 +725,19 @@
               //buttonA.rotation.x = Math.PI / 2;
               buttonA.position.set(bttn_a_x, bttn_a_y, 10);
               buttonA.name ="button_a";
-              createText('Question A', options[0]['a'], bttn_a_x - text_pos_x,  bttn_a_y + text_pos, 0xFFFFFF)
+              createText('question_text_a', options[0]['a'], bttn_a_x - text_pos_x,  bttn_a_y + text_pos, 0xFFFFFF)
   
               buttonB.position.set(bttn_b_x, bttn_b_y, 20 );
               buttonB.name ="button_b";
-              createText('Question B',options[0]['b'], bttn_b_x - text_pos_x,  bttn_b_y + text_pos,  0xFFFFFF)
+              createText('question_text_b',options[0]['b'], bttn_b_x - text_pos_x,  bttn_b_y + text_pos,  0xFFFFFF)
              
               buttonC.position.set(bttn_c_x, bttn_c_y, 20 )
               buttonC.name ="button_c";
-              createText('Question C',options[0]['c'], bttn_c_x - text_pos_x, bttn_c_y + text_pos,  0xFFFFFF)
+              createText('question_text_c',options[0]['c'], bttn_c_x - text_pos_x, bttn_c_y + text_pos,  0xFFFFFF)
   
               buttonD.position.set( bttn_d_x, bttn_d_y , 20,  0xFFFFFF);;
               buttonD.name ="button_d";
-              createText('Question D',options[0]['d'], bttn_d_x - text_pos_x, bttn_d_y + text_pos,  0xFFFFFF)
+              createText('question_text_d',options[0]['d'], bttn_d_x - text_pos_x, bttn_d_y + text_pos,  0xFFFFFF)
   
   
               scene.add(buttonA);
@@ -784,14 +762,14 @@
 
                   score_mesh[1] = createTextMesh('1000', score_button_default, score_mesh_x, score_mesh_bttm, texture_gradient );
                   score_mesh[2] = createTextMesh('2,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
-                  score_mesh[3] = createTextMesh('3,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
-                  score_mesh[4] = createTextMesh('4,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
-                  score_mesh[5] = createTextMesh('5,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
-                  score_mesh[6] = createTextMesh('6,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
-                  score_mesh[7] = createTextMesh('7,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
-                  score_mesh[8] = createTextMesh('8,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad , texture_gradient);
-                  score_mesh[9] = createTextMesh('9,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
-                  score_mesh[10] = createTextMesh('10,000', 'gold', score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
+                  score_mesh[3] = createTextMesh('4,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
+                  score_mesh[4] = createTextMesh('8,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
+                  score_mesh[5] = createTextMesh('10,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
+                  score_mesh[6] = createTextMesh('12,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
+                  score_mesh[7] = createTextMesh('14,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
+                  score_mesh[8] = createTextMesh('16,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad , texture_gradient);
+                  score_mesh[9] = createTextMesh('18,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
+                  score_mesh[10] = createTextMesh('20,000', 'gold', score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
                   
                   
                   score_mesh.forEach(element => {
@@ -829,6 +807,14 @@
               scene.remove(scene.getObjectByName("button_b"));
               scene.remove(scene.getObjectByName("button_c"));
               scene.remove(scene.getObjectByName("button_d"));
+
+              scene.remove(scene.getObjectByName("question_text_a"));
+              scene.remove(scene.getObjectByName("question_text_b"));
+              scene.remove(scene.getObjectByName("question_text_c"));
+              scene.remove(scene.getObjectByName("question_text_d"));
+              scene.remove(scene.getObjectByName("question_text"));
+            
+
            
           }
           function clearScene(){

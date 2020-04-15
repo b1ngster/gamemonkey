@@ -1,28 +1,30 @@
 
             class Sequencer {
                 constructor() {
-                    var item, _items = [], _itemsActive = [], _itemsToRemove = [], _currentItem = 0, _totalItems = 0, _nextItem = 0, _nextItemToRemove = 0, _time = 0, _layersNeedSorting = false;
+                    var item, _items = [], _itemsActive = [],  _itemsToRemove = [], _currentItem = 0, _totalItems = 0, _nextItem = 0, _nextItemToRemove = 0, _time = 0, _layersNeedSorting = false;
                     
                     var speed = 2; //units a second
                     var delta = 0;
-                    var item_clock = 0;
                     var urls = [];
                     var finished = false;
-                    var clock =  new THREE.Clock();
+                    var _video;
+                    this.userInput = undefined;
                     var itemIndex = 0;
                     var countdownTimer;
-                    this.add = function (item, start, end, init, scene) {
+                    this.add = function (item, start, end, init, scene, ) {
 
-                      //  console.log(item);
                         item = item;
                         item.id = Math.random().toString(36).substr(2, 9);
                         item._active = false;
                         item._start = start;
-                        
+                        item.coundown = false;
                         item._duration = end - start;
                         item._end = end;
-                        item.timer;
-                        item._scene = scene;
+                        
+                        item._scene ? scene : function(){
+
+                           
+                        };
                         item._init = init;
                         item._first = true;
                         
@@ -47,7 +49,6 @@
                             )
                             
                         }
-                        //console.log(urls)
                         _items.push(item);
                         _items.sort(function (a, b) { return a.__start - b.__start; });
                      
@@ -62,27 +63,45 @@
                         return urls;
                     }
 
-                    this.createItem = function(item){
-
-                        console.log(item);
-                        _itemsToRemove.push(item);
+                    this.createItem = function(){
+                        
+                        console.log('create item')
+                        removeGui();
+                   if(video.ended){
+                    console.log('create video ended');
+                     item = _items[_currentItem];
+                    // item = Object.prototype.toString.call(item)
+                      //item = JSON.stringify(item);
+                      console.log(item);
+                        removeGui();
+                     renderButtons(item['question'], item['answers']);
+                       
+                        this._finished = false;
+                        this.userInput = false;
+                       // item._time = performance.now
                       
                         if(item['videos']){
+                            
+                            
+                            this._video = 'question';
                         
-                           video =  renderVideo(item['videos'][0]['question'])
+                            return video = renderVideo(item['videos'][0]['question'])
                         }
                          else{
+                             this._video = 'question_timed'
                         
-                        renderVideo('videos/CountdownTimer.mp4');
+                         renderVideo('videos/CountdownTimer.mp4');
                             
                            }
                           item.start = performance.now();
-                         ++_currentItem;
-                         renderButtons(item['question'], item['answers']);
-                         return this;
+                       
                         
+
+                         return this;
+                   }
                     }
-                    this.coundown = function () {
+                    this.coundownTimer = function () {
+                        this._video = 'coundown_90';
                         renderVideo('videos/CountdownTimer.mp4');
                     };
                     this.getItems = function () {
@@ -90,35 +109,62 @@
                     };
                  
                     this.checkTime = function(){
-                       return clock - performance.now() / 1000;
+                       return _time - performance.now() / 1000;
                     }
 
-                    this.finished = function (){
-                        
-                    }
+                   this.increment = function(){
+                       removeGui();
+                  _currentItem++;
+                   console.log('increment')
+                    return this.createItem();
                     
-                    this.next = function (video) {
+                   }
+                    
+                    this.next = function (video, ...args) {
+                    
+                    
+                        if(video){
+                        if(this._video === 'Gameover'){
+                           // window.location.reload(true);
+                        }
+                        if(this.userInput === 'win'){
+                            removeGui();
+                            console.log('winner');
+                            console.log(video);
+                          this._video = 'win';
+                            
+                          renderVideo('videos/questions/lewis/questions/win.mp4');
+
+                         
                       
-                       //console.log()
-                        item = _items[_currentItem];
+                        }
+                        if(this._video === "win"){
+
+                           //this.increment();
+                        }
                         
+                        if(_currentItem === 0){
+                            this.createItem(item);
+                            }
+                          
+
+                      
+                  //  console.log(video.attributes)
+                        
+
                       //  removeGui();
                      //   
                        
-                        if(_currentItem === 0){
-                        this.createItem(item);
-                        }
-                      
-                        
-                        console.log(this.getClockTime(item))
+                   
+                    } 
+                       // console.log(this.getClockTime(item))
                       
                       
                       
-                        if(  item.finished){
+                        if(  this.finished(item)){
 
-                        
-                    console.log('item finished');
-                        if(item.first === true||this.checkTime > 30){
+                        console.log('finished is a success');
+                  //  console.log('item finished');
                         this.createItem(item);
                         item.first = false;
                         }
@@ -130,39 +176,90 @@
                        
                      
                       // video.play();
-                    };
-
-
+                   
                 
                    
 
                     this.current = function () {
-                        return _currentItem;
+                        return item;
                     };
-                    this.nextVideo = function () {
-                        return ++_currentItemVideo;
+                    this.currentVideo = function () {
+                        
+
                     };
                     this.clockStart = function(){
                         clock = performance.now();
                     }
                     this.getClockTime = function(){
-                    var t  =  performance.now() - clock;
-
+                     
+                    var t  =  item.clock;
+                 //   console.log(t)
                       return  t
                     }
                     this.finished = function(){
-                        console.log(this.getClockTime);
+                     
+                       if(this._video === 'win'){
+                      
+                        console.log('incrementing');
+                      this.increment();
+                     this.userInput = undefined;
+                         }
+
+                       if(this.userInput === 'win' ){
+                        console.log(this._video);
+                        renderVideo('videos/questions/lewis/questions/win.mp4')
+                        this.video = "win"
+                   } else if(this.userInput === 'fail'){
+                    console.log(this._video)
+                     
+                    
+                       }
+                       
+                       if(this._video === 'question' && this.userInput === undefined ){
+                        
+                        this.video = 'countdown';
+                     video = renderVideo('videos/CountdownTimer.mp4');
+
+                       }
+
+                     if(this.userInput === undefined  && this.video === 'countdown'){
+                         console.log(this.userInput);
+                         console.log('no input called')
+                  //  video.ended = (e) => {
+                  //     this.noInput()
+                  //    }
                     }
-                    this.currentVideo = function () {
 
-                        console.log(_items)
-                        return _currentItem;
-                    };
+                    }
+                     //return 
+                          //    )
+                        
+                    
+                    this.noInput = function (e) {
+                        ////video.load();
+                        console.trace();
+                        if(this.previous = 'countdown'){
+                        this._video = 'Gameover';
+                        video.removeAttribute('src');
+                        video =  renderVideo('videos/game_over.mp4');
+                        video.addEventListener("ended",function _f(e){
+                       //     windows.location.reload()
+                            console.log('no Input Event:' +e)
+                       
+                            console.log('no Input function:' +_f)
 
+                        }
+                        )};
+                    }
+
+                    this.reload = function(){
+                        console.log('reloading')
+                        location.reload(true);
+                    }
                     this.preload = function(){
 
                         urls = new Set(this.getUrls());
-                        console.log(urls);
+                       // console.log(urls);
                         urls.forEach( value =>{
                         var preloadLink = document.createElement("video");
                         preloadLink.src = value;
@@ -203,4 +300,22 @@
                     }
                 
                 }
+            
+
+            handleClick(handle){
+
+                this.userInput = handle;
+                if(handle === this.current().correct){
+                
+                    console.log('correct');
+                    this.userInput = 'win'
+                   // this.next();
+                   this.next();
+                  // this.renderVideo('videos/questions/lewis/questions/win.mp4')
+                    
+               
+                }else{
+                    renderVideo('videos/questions/lewis/questions/fail.mp4')
+                }
+            }
             }
