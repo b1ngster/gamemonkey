@@ -4,7 +4,7 @@
 <head>
 	<title>Game Monkey </title>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -19,14 +19,18 @@ html, body{
     margin: 0;
     background-color: #000000;
     }
-  
+    body{
+        overflow:hidden;
+    }
     header{
         height: 30%;
         vertical-align: middle;
 
     }
-
-
+    #about_text, p{
+    width: 60%;
+    margin: 0 auto;
+    }
 
 </style>
 
@@ -36,9 +40,11 @@ html, body{
 
 
     <header>
-        <a href="/" >
+        <a href="index.html">
+       
         <h1>Game Monkey</h1>
-        </a>
+             
+    </a>
         <nav>
             <a href="index.html">Home |</a>
             <a href="about.html">About |</a>
@@ -48,42 +54,35 @@ html, body{
 
 
 
-<a href="/">
-    <div class="sidenavleft">
+
+    <div class="sidenavleft sidebar">
         <img src="img/logo_small.png" width="192" height="192"  class="gm_logo">
         </div>
-        <div class="sidenavright">
+        <div class="sidenavright sidebar">
                 
         <img src="img/logo_small.png" width="192" height="192"  class="gm_logo">
             </div>	
-        </a>
     <main>
  	
           <div class="row row-centered">
-            <section>
-                <h2 id="index_title">
-                    Apps and Games
-                </h2>
-            </section>
-
-
-
-
             <article id="Game" title="Perfect 10">
                 
-                
-            <a href="perfectTen.html">
-             <img src="img/perfect10.PNG" alt="Perfect 10 Game" />
-         </a>
-         <h2>
-             The Perfect Ten
-         </h2>
-         <p>
-             The perfect ten
-         </p>
-         </article>
+              <section style="color:white; font-size: xx-large;width:80%" id="about_text">
+                <h1>
+                   Who is Game Monkey?
+                </h1>
+                <p>
+                    We are a group of student developing apps and games. If you would like to get involved
+                    please <a href="contact.html">contact us</a>.
+
+
+                </p>
+
+              </section>
+              </article>
+    
                 </div>
-            
+            </div>
          </main>   
    
 <footer>

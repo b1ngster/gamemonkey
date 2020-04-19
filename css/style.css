@@ -1,20 +1,18 @@
 body {
 	align-content: center;
-	background-color: #fff;
+background-color: rgb(245, 221, 8);
 }
 
 header {
-  background-color: #f9ed3e;
+  background-color:black;
   padding: 30px;
 	width: 100%;
   text-align: center;
   font-size: 35px;
-  color: black;
-	position: fixed;
+  color: white;
 	z-index: 1;
 	top: 0;
-	overflow-x: hidden;
-  font-family: Cambria, "Hoefler Text", "Liberation Serif", Times, "Times New Roman", "serif"
+  font-family: "Impact, Charcoal, sans-serif";
 }
 
  video {
@@ -25,14 +23,12 @@ header {
 
 .sidenavleft {
   height: 100%;
-  width: 160px;
-  position: fixed;
+  width: 10%;
+  position:fixed;
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #f9ed3e;
-  overflow-x: hidden;
-  padding-top: 20px;
+  background-color: rgb(245, 221, 8);
 }
 
 .sidenavleft a {
@@ -55,14 +51,16 @@ header {
 
 .sidenavright {
   height: 100%;
-  width: 160px;
+  width: 10%;;
   position: fixed;
   z-index: 1;
   top: 0;
-  right: 0;
-  background-color: #f9ed3e;
-  overflow-x: hidden;
-  padding-top: 20px;
+  right: 0;  
+  background-color: rgb(245, 221, 8);
+
+}
+footer{
+  bottom: 5%;
 }
 
 .sidenavright a {
@@ -72,9 +70,17 @@ header {
   color: #000;
   display: block;
 }
-
+html, body{
+  color:white;
+}
+#index_title{
+  margin-bottom: 4em;
+}
 .sidenavright a:hover {
   color: #f1f1f1;
+}
+.gm_logo{
+  width:100%;
 }
 
 .mainright {
@@ -95,8 +101,37 @@ header {
     background-color: #ccc;
     border: 1px solid #ddd;
 }
+a, a:visited, a:hover, a:active {
+  color: inherit;
+}
+nav{
+  float:right;
+  margin-right:10em;
+}
+ a {
+  display:inline;
+  text-decoration: none;;
 
-@media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
+}
+form{
+  margin-left:20%;
+}
+input[type=text] {
+  width: 70%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+input[type=text]:focus {
+  background-color: lightblue;
+}
+textarea {
+  width: 70%;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  resize: none;
 }
