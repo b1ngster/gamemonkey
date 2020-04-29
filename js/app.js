@@ -1,11 +1,43 @@
 
-      
+class ResourceTracker {
+  constructor() {
+    this.resources = new Set();
+  }
+  track(resource) {
+    if (resource.dispose || resource instanceof THREE.Object3D) {
+      this.resources.add(resource);
+    }
+    return resource;
+  }
+  untrack(resource) {
+    this.resources.delete(resource);
+  }
+  dispose() {
+    for (const resource of this.resources) {
+      if (resource instanceof THREE.Object3D) {
+        if (resource.parent) {
+          resource.parent.remove(resource);
+        }
+      }
+      if (resource.dispose) {
+        resource.dispose();
+      }
+    }
+    this.resources.clear();
+  }
+}
+      const debug = true;
         var container, scene, camera, renderer, controls, stats;
     
         //  var keyboard = new THREEx.KeyboardState();
         /*  THREEx.FullScreen.bindKey({ charCode: 'f'.charCodeAt(0) });
         
         */
+
+       
+     
+    
+        var scene = {};
        var handleResize	= function(){
       
         
@@ -24,7 +56,7 @@
               
               var overlay = document.getElementById( 'overlay' );
               
-                  overlay.remove();
+              overlay.remove();
               // SCENE
              
     
@@ -54,7 +86,10 @@
               
               raycaster = new THREE.Raycaster();
               mouseVector = new THREE.Vector2();
-              container = document.getElementById('ThreeJS');
+              container = document.getElementById('my-gui-container');
+              container.style.top = 0;
+              container.style.left = 0;
+              container.style.width = 100 + '%';
   
             var  user = { username: "",
                           current_question: 0,
@@ -63,12 +98,12 @@
                           answers: []
                           }
          
-   
+    var geometries = [];
   
   // http://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
   function shuffle(array) {
 
-    console.log(array)
+    
     var currentIndex = array.length
       , temporaryValue
       , randomIndex
@@ -90,7 +125,10 @@
     return array;
   }
 
-  
+  var data =  RequestQuestions().then(e=>{
+            
+    return e[0];
+})
   function loadJSON(url, callback) {   
   
   var xobj = new XMLHttpRequest();
@@ -108,13 +146,13 @@
         var json;
         var data = function(){
             loadJSON("js/questionbank.json", function(response) {
-         // console.log(response)
+        
             json = JSON.parse(response);
-           // console.log(json);
+         
           // Call another function with json that is now filled with data
          return json
             });
-            return data;
+            return shuffle(data[0]);
         }
   
   
@@ -128,19 +166,10 @@
    }
    }
 
-   var sequence = new Sequencer();
-
-   let newObject;
-   const newArr = [];
-   data =  RequestQuestions().then(e=>{
-        
-    return e[0];
-});
-
-    var scene = {};
+  
   
           function init() {
-  
+       
             //ensure correct zoom
             var scale = 'scale(1)';
             document.body.style.webkitTransform =  scale;    // Chrome, Opera, Safari
@@ -148,31 +177,17 @@
              document.body.style.transform = scale;     // General
   
               scene = new THREE.Scene();
-            var texture_gradient = new THREE.TextureLoader().load('assets/user-interface/button.png');
+            var texture_gradient = new THREE.TextureLoader().load('img/user-interface/button.png');
             
-            console.log(data);
-            data = shuffle(data)
-           console.log(data);
+        
+         
+          sequence = new Sequencer();
+            
+            
            
-            for (let index = 0; index < data.length; index++) {
-
-                for (let j = 0; j < data[0].length; j++) {
-                // Get num of each fruit
-                sequence.add(data[index][j]);
-             // console.log(sequence);
-              }
-            }
-           
-
-          
-
-           //console.log(sequence.getItems());
-           
-             
-           
-        var gui_question_tex = new THREE.TextureLoader().load('/assets/user-interface/question_board.png');
+        var gui_question_tex = new THREE.TextureLoader().load('/img/user-interface/question_board.png');
        
-  
+       
               // https://threejsfundamentals.org/threejs/lessons/threejs-fundamentals.html
                SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
               var VIEW_ANGLE = 45,
@@ -184,6 +199,8 @@
               
     
                   window.addEventListener( 'click', handleUserInput, false );
+                  document.addEventListener('touchend', handleUserInput, false);
+
                   window.addEventListener('resize', handleResize, false);
                   //camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
                   camera =     new THREE.OrthographicCamera(window.innerWidth / -2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / -2, 1, 500);
@@ -212,14 +229,14 @@
                //add Event Listners
               
               // create the video element
-              video = document.createElement('video');
+              video = document.getElementById('video_elem');
                video.id = 'intro';
               // video.type = ' video/ogg; codecs="theora, vorbis" ';
               video.src = "videos/intro.mp4";
               video.load(); // must call after setting/changing source
               video.muted = false;
-              
-              
+            
+              video.play();
             
               videoImage = document.createElement('canvas');
               videoImage.id = "video_canvas"
@@ -242,23 +259,31 @@
               var movieScreen = new THREE.Mesh(movieGeometry, movieMaterial);
               movieScreen.position.set(0, 10, 0);
               scene.add(movieScreen);
-              video.play();
-              sequence.preload();
-             
-           
             
+              
+              sequence.init(data);
+              sequence.preload();
+            /*
+            	composer = new THREE.EffectComposer( renderer );
+			      	composer.addPass( new RenderPass( scene, camera ) );
+
+			      	var effect = new ShaderPass( DotScreenShader );
+			        effect.uniforms[ 'scale' ].value = 4;
+			      	composer.addPass( effect );
+              */
               camera.position.set(0, 0, 300);
               camera.lookAt(movieScreen.position);
-                
-             
-  
+
+            
+             // video = video.play();
+
           }
         
-          
+         
           function handleUserInput (e){
   
               e.preventDefault();
-              e.preventP
+            
               var mouseVector = new THREE.Vector3(
                   ( e.clientX / window.innerWidth ) * 2 - 1,
               - ( e.clientY / window.innerHeight ) * 2 + 1,
@@ -273,268 +298,77 @@
   
          // Handle button clicks
               if (intersects.length>0){
-      
-                console.log(intersects[0].object.name)
+
+                intersects[0].object.material.color.setRGB(1,1,1)
       if(intersects[0].object.name == "button_a" | "buttonA_text"){
-        intersects[0].object.color = 0xFF0022;
-         Quiz("a")
+        
+                     sequence.option("a")
+     
       }
       if(intersects[0].object.name == "button_b"| "buttonB_text"){
-        intersects[0].object.color = 0xFF0022;
-          Quiz("b")
+        
+                     sequence.option("b")
+         
       }
       if(intersects[0].object.name == "button_c"| "buttonC_text"){
-          Quiz("c")
-          intersects[0].object.color = 0xFF0022;
+         
+        
+                    sequence.option("c");
       }
       if(intersects[0].object.name == "button_d"| "buttonD_text"){
-          Quiz("d")
-          intersects[0].object.color = 0xFF0022;
+        
+                    sequence.option("d");
       }
   
   }
           }
-  
+  function dispose(object){
+          if(object){
+            object.geometry.dispose();
+              object.material.dispose();
+              scene.remove( object );
+            }
+          }
   
           function animate() {
             
               update();
               render();
-          requestAnimationFrame(animate);
+             requestAnimationFrame(animate);
           }
+
           var intro_complete = 0;
   
           function update() {
           
-            if(video.ended){
            
-               
-                   sequence.next(video);
-              //  console.log(ended)
-           
-            }
-                
-        
-          
-  
-              //controls.update();
-             // stats.update();
+             if(video.ended){
+                 sequence.next(video);
+               }
+            // stats.update();
           }
   
           function render() {
             //renderButtons();
-          
-              if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                 if (video.readyState === video.HAVE_ENOUGH_DATA) {
                   videoImageContext.drawImage(video, 0, 0);
                   if (videoTexture)
-                      videoTexture.needsUpdate = true;
+                     videoTexture.needsUpdate = true;
               }
               
               renderer.render(scene, camera);
           }
   
+ 
+       function renderVideo(videopath){
   
-  /*contains logic for quiz
-  
-  */
-  function play(){
-    video.play();
-
-
-  }
-      function Quiz(button_clicked ){
-
-   
-                
-             /*.then((values)=>{
-               question_data = values.data.questions;
-             });
-             */
-            // var user.current_questio = 10 //Math.floor(Math.random() * 10 + 1);
-           
-            // QuestionBank.forEach((key, value)=>{
-           //   console.log(key);
-            //  console.log(value);
-            //});
-              
-             console.log(sequence.handleClick(button_clicked));
-             /*
-            user.current_question =0
-            console.log(user);
-            if(user.current_question == 0){
-           // clearScene();
-            videopath = "videos/rules_scene.mp4";
-             video = renderVideo(videopath);
-            /*  
-          video.addEventListener("ended", videoEnded); 
-  
-              function videoEnded(){
-                  console.log('The video has ended')
-              // clearScene();
-               
-            user.current_question++
-             
-        }
-         //     console.log(user)
-            
-               
-            }
-
-
-          //  var QBank = questionBank.questions[user.current_question]
-            
-            
-          //  renderButtons();
-         //   var answer = QBank.correct;
-         /*
-            if( answer !== undefined)
-             if( answer.substr(-1) == button_clicked){
-              user.current_video++;
-              user.current_question++;
-              user.score += 10;
-              user.answers.push([user.current_video, button_clicked])
-  
-             //0 indexed array 
-              
-  
-              
-             videopath = "./videos/questions/question.mp4";
-              //console.log(videopath);
-             // videopath = "videos/questions/fail.mp4"
-             if(user.current_question == 10){
-              videopath = "videos/questions/win.mp4";
-            
-              }
-              var video = renderVideo(videopath);
-              video.addEventListener("ended", videoEnded); 
-  
-              function videoEnded(){
-                  window.location.reload(true);
-              }
-            //  var buttons = renderButtons(user.current_question);
-              
-              }else{
-                 // removeGui();
-                // clearScene();
-                  videopath = "videos/questions/fail.mp4"
-                  var video = renderVideo(videopath);
-                 
-                  video.addEventListener("ended", videoEnded); 
-  
-          }
-      
-          /*
-            ///button check A
-            if(button_clicked == 'a'){
-              videopath = `/videos/questions/question_${user.current_video}/A.ogv`;
-             console.log(videopath);
-              var video = renderVideo(videopath);
-              if(video.ended){
-                  console.log('ended');
-              }
-              console.log(user.current_question);
-              console.log(questionBank.questions[user.current_question]);
-            
-            /*
-              if(questionBank.questions[user.current_question].correct
-             .substr(-1) !== 'a'){
-                 console.log('incorrect');
-             }else{
-                 console.log('correct')
-             }
-           //  user.current_question++;
-           //  user.current_video++;
-             renderButtons();
-            }
-  
-            //button check B
-            if(button_clicked == 'b'){
-  
-              videopath = `/videos/questions/question_${user.current_video}/B.ogv`;
-              var video = renderVideo(videopath);
-             
-              if(questionBank.questions[user.current_question].correct
-                      .substr(-1) !== 'b'){
-                 console.log('incorrect');
-             }else{
-                 console.log('correct')
-             }
-            //  user.current_question++;
-            //  user.current_video++;
-              renderButtons();
-            } 
-  
-  
-            if(button_clicked == 'c'){
-              //videopath = '`/videos/questions/question_${user.current_video}/C.ogv`;
-             // videopath = "/videos/questions/fail.mp4"
-              user.current_question;
-              var video = renderVideo(videopath);
-              if(questionBank.questions[user.current_question]
-                      && questionBank.questions[user.current_question].correct.substr(-1) == 'c'){
-                 console.log('incorrect');
-             }else{
-                 console.log('correct')
-             }
-            // 
-             //user.current_video++;
-            
-            }
-            if(button_clicked == 'd'){
-             
-              videopath = `/videos/questions/question_${user.current_video}/D.ogv`;
-              var video = renderVideo(videopath);
-              if(questionBank.questions[user.current_question].correct 
-              .substr(-1) !== 'd'){
-                 console.log('incorrect');
-             }else{
-             }
-             // user.current_question++;
-            //  user.current_video++;
-             
-            }
-            */
-        
-           if( user.current_question === 1 ){
-
-            console.log('user question check 1')
-           
-           
-            
-           //renderVideo(user.current_video);
-           }
-         //  renderButtons(user.current_video);
-            /*
-            
-      
-  
-      scene.add( mesh );
-  
-  } );
-  */
-  
-      
-  
-  
-          }
-      
-  
-          function renderVideo(videopath){
-  console.log("rendering video check 2 " + videopath);
-
-       //    console.trace();
-          
-           if(video.ended){
-             console.log(this.previous);
-             video.removeAttribute('src');
-            video.load();
+             //video.removeAttribute('src');
+              removeGui();
+              clearScene();
               video.setAttribute( "src", videopath);
-              video.load();
-               // must call after setting/changing source
-             video.play();
-             if(video.ended){
-              video.load();
-             }
+              video.load();  // must call after setting/changing source
+            
+
               videoImage = document.createElement('canvas');
               videoImage.width = 1920;
               videoImage.height = 1080;
@@ -555,37 +389,46 @@
               var movieScreen = new THREE.Mesh(movieGeometry, movieMaterial);
               movieScreen.position.set(0, 10, 0);
               scene.add(movieScreen);
-            }
-              //video.play();
-              return video;
             
+              video.play();
+               
+              video.muted = false;
+              video.volume = 0.75
+            return video;
           }
   
   
           function createText(name, text, x, y, color){
-           // console.log(name + text);
+            
+            
+            
                    
                       var loader = new THREE.FontLoader();
   
                   loader.load( 'js/fonts/helvetiker_bold.typeface.json', function ( font ) {
   
-                  var textGeo = new THREE.TextGeometry( text, {
+
+                   textGeo = new THREE.TextGeometry( text, {
                       font: font,
                       size: 12,
                       height: 2,
                       curveSegments: 12,
                       } );
-                    
-                     textGeo.computeBoundingBox()
+                   
+                     textGeo.computeBoundingBox();
+                     geometries.push(textGeo.uuid);
                       textWidth = textGeo.boundingBox.max.x - textGeo.boundingBox.min.x;
-              var  textMaterial = new THREE.MeshBasicMaterial( {
+                
+                      textMaterial = new THREE.MeshBasicMaterial( {
                       color: color || 0x000000,
                       flatShading: false,
   
                   } );
-              var textMesh = new THREE.Mesh( textGeo, textMaterial );
-                  textMesh.name = name;
-                  console.log(name);
+
+               textMesh = new THREE.Mesh( textGeo, textMaterial );
+                  textMesh.name ? name : textMesh.uuid;
+              
+                  geometries.push(textMesh.uuid);
                    textMesh.position.set(x - textWidth / 2, y , 42);
                   
                   scene.add(textMesh);
@@ -630,27 +473,34 @@
                 
                   }).then((e)=>{
                       data = Object.values(e);
+                     
+                      shuffle(data[0]);
                       return data;
                     })
                   }
   
        
           function renderButtons(question_text, options){
-            var texture_gradient = new THREE.TextureLoader().load('assets/user-interface/button.png');
-             
+
+          
+
+           try{ removeGui();
+           }catch{ //do nothing the gui isnt there
+
+            }
+             texture_gradient = new THREE.TextureLoader().load('img/user-interface/button.png');
            
-            var gui_question_tex = new THREE.TextureLoader().load('/assets/user-interface/question_board.png');
-           
+             gui_question_tex = new THREE.TextureLoader().load('/img/user-interface/question_board.png');
+            
+
+            
               function createTextMesh( text, color, x, y, ){
                
-             
+              renderer.setClearColor( 0x000000, 0 ); // the default
             
-               renderer.setClearColor( 0x000000, 0 ); // the default
-
-                
-               var scoreboard_material = new THREE.MeshBasicMaterial({ color: color, map: gui_question_tex, side: THREE.DoubleSide });
+                scoreboard_material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, map: gui_question_tex, side: THREE.DoubleSide });
               
-               var scoreboard_geo = new THREE.PlaneGeometry(90, 30, 10, 10);
+                scoreboard_geo = new THREE.PlaneGeometry(90, 30, 10, 10);
                 
                scoreboard_material.transparent = true;
                scoreboard_mesh = new THREE.Mesh( scoreboard_geo, scoreboard_material);
@@ -663,18 +513,12 @@
   
              var offset_y = -25; // the position bottom of the gui 
          
+              var  ButtonA_tex, ButtonB_tex,ButtonC_tex, ButtonD_tex   = gui_question_tex; //new THREE.TextureLoader().load(`img/user-interface/button.png`);
               
-             
-              var ButtonA_tex, ButtonB_tex,ButtonC_tex, ButtonD_tex   = gui_question_tex; //new THREE.TextureLoader().load(`assets/user-interface/button.png`);
-              
-             //new THREE.TextureLoader().load('assets/user-interface/button.png');
-             // var gui_question_material = new THREE.MeshLambertMaterial({ color:'red'  });
              var gui_question_material = new THREE.MeshBasicMaterial({ color: 'white', map: gui_question_tex, side: THREE.DoubleSide });
              gui_question_material.transparent = true;
              
-              //gui_question_material.transparent = true;
-  
-  
+             
               var gui_question_geometry = new THREE.PlaneGeometry(600, 60, 10, 10);
               var gui_question_mesh = new THREE.Mesh(gui_question_geometry, gui_question_material);
             
@@ -700,20 +544,14 @@
   
               var text_pos = 2;
   
-              
-              
-              
               var button_default_color = new THREE.Color( 0x092533 );
   
-               
               var buttonMat =  new THREE.MeshBasicMaterial({  color: 0x1193d4, map: texture_gradient, side: THREE.DoubleSide });
               buttonMat.transparent = true;
              
-            
-             
-              //width height and wsegment hsegments
+             //width height and wsegment hsegments
               var buttonGeometry = new THREE.PlaneGeometry(340, 40, 10, 10);
-              
+             
               var buttonA = new THREE.Mesh(buttonGeometry, buttonMat);
               var buttonB = new THREE.Mesh(buttonGeometry, buttonMat);
               var buttonC = new THREE.Mesh(buttonGeometry, buttonMat);
@@ -726,19 +564,22 @@
               buttonA.position.set(bttn_a_x, bttn_a_y, 10);
               buttonA.name ="button_a";
               createText('question_text_a', options[0]['a'], bttn_a_x - text_pos_x,  bttn_a_y + text_pos, 0xFFFFFF)
-  
+              //console.log(buttonA);
               buttonB.position.set(bttn_b_x, bttn_b_y, 20 );
               buttonB.name ="button_b";
               createText('question_text_b',options[0]['b'], bttn_b_x - text_pos_x,  bttn_b_y + text_pos,  0xFFFFFF)
              
               buttonC.position.set(bttn_c_x, bttn_c_y, 20 )
               buttonC.name ="button_c";
-              createText('question_text_c',options[0]['c'], bttn_c_x - text_pos_x, bttn_c_y + text_pos,  0xFFFFFF)
+              if(scene.getObjectByName('question_text_c')){
+                scene.remove(scene.getObjectByName('question_text_c'));
+              }
+              createText('question_text_c', options[0]['c'], bttn_c_x - text_pos_x, bttn_c_y + text_pos,  0xFFFFFF)
   
               buttonD.position.set( bttn_d_x, bttn_d_y , 20,  0xFFFFFF);;
               buttonD.name ="button_d";
-              createText('question_text_d',options[0]['d'], bttn_d_x - text_pos_x, bttn_d_y + text_pos,  0xFFFFFF)
-  
+              createText('question_text_d', options[0]['d'], bttn_d_x - text_pos_x, bttn_d_y + text_pos,  0xFFFFFF)
+              
   
               scene.add(buttonA);
               scene.add(buttonB);
@@ -758,17 +599,17 @@
                   var score_mesh_bttm = -220;
                   var score_pad = 40;
                   var score_mesh_x = window.innerWidth / 20 * -8;
-                  var score_button_default = new THREE.Color('mediumturquoise');
+                  var score_button_default = new THREE.Color('white');
 
                   score_mesh[1] = createTextMesh('1000', score_button_default, score_mesh_x, score_mesh_bttm, texture_gradient );
                   score_mesh[2] = createTextMesh('2,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
                   score_mesh[3] = createTextMesh('4,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
                   score_mesh[4] = createTextMesh('8,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
-                  score_mesh[5] = createTextMesh('10,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
-                  score_mesh[6] = createTextMesh('12,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
-                  score_mesh[7] = createTextMesh('14,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
-                  score_mesh[8] = createTextMesh('16,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad , texture_gradient);
-                  score_mesh[9] = createTextMesh('18,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
+                  score_mesh[5] = createTextMesh('6,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
+                  score_mesh[6] = createTextMesh('6,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
+                  score_mesh[7] = createTextMesh('7,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
+                  score_mesh[8] = createTextMesh('8,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad , texture_gradient);
+                  score_mesh[9] = createTextMesh('9,000',score_button_default, score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
                   score_mesh[10] = createTextMesh('20,000', 'gold', score_mesh_x, score_mesh_bttm += score_pad, texture_gradient);
                   
                   
@@ -781,46 +622,119 @@
   
               /// LIFELINES
                    var geometry = new THREE.CircleGeometry( 24, 32 );
+                  
+                  
+             lifeline_tex = new THREE.TextureLoader().load('/img/user-interface/lifeline_heart.png');
+             lifeline_red_tex = new THREE.TextureLoader().load('/img/user-interface/lifeline_heart_lost.png');
+               
+
   
-  
-                  var material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-  
-                    var lifeline_1 = new THREE.Mesh( geometry, material );
+                  var white_mat = new THREE.MeshBasicMaterial( { color: 'white', map: lifeline_tex} );
+                  
+                  var red_mat = new THREE.MeshBasicMaterial( { color: 0xffffff, map: lifeline_red_tex} );
+                   var  material1 = white_mat;
+                  var  material2 = white_mat;
+                  var  material3 = white_mat;
+
+                  console.log('the sequence' + sequence.input_sequence());
+                 
+                  if( sequence.input_sequence().find(()=>'loose') !== undefined ){
+
+                    console.log(sequence.input_sequence().find(()=>'loose'));
+                    lifes = sequence.input_sequence().find(()=>'loose').length;
+                    console.log(lifes);
+                  
+                            switch(lifes){
+                            case 0:
+                                material1 = red_mat;
+                                break; 
+                            case 1:
+                                material2 = red_mat;
+                                break;
+                            case 2:
+                                  material3 = red_mat;
+                                  break;    
+                            }
+                }
+
+                  var lifeline_1 = new THREE.Mesh( geometry, material1 );
+                    
                   lifeline_1.position.set(window.innerWidth / 20 * -7.3, 200, 20);
+              
                   scene.add( lifeline_1 );
   
-                  var lifeline_2 = new THREE.Mesh( geometry, material );
+                  var lifeline_2 = new THREE.Mesh( geometry, material2 );
                   lifeline_2.position.set(window.innerWidth / 20 * -8, 200, 20);
                   scene.add( lifeline_2 );
   
-                  var lifeline_3 = new THREE.Mesh( geometry, material );
+                  var lifeline_3 = new THREE.Mesh( geometry, material3 );
                   lifeline_3.position.set(window.innerWidth / 20 * -8.7, 200, 20);
                   scene.add( lifeline_3 );
-                }
+
+              var countdown = document.createElement('video');
+              countdown.src = "/videos/countdown_timer_square.mp4"
+              countdown.load();
+              countdown.muted = true;
+              countdown.setAttribute( 'webkit-playsinline', 'webkit-playsinline' );
+                var videoTexture = new THREE.VideoTexture( countdown );
+                videoTexture.minFilter = THREE.LinearFilter;
+                videoTexture.magFilter = THREE.LinearFilter;
+                videoTexture.format = THREE.RGBFormat;
+
+        
+	
+	// use the texture in a THREE.Mesh
+	      var countdown_geometry	=  new THREE.PlaneGeometry(90, 30, 10, 10);
+               
+	      var countdown_material	= new THREE.MeshBasicMaterial({
+	                 	map	: videoTexture.texture
+	                    });
+	     var mesh	= new THREE.Mesh( countdown_geometry, countdown_material );
+                  mesh.position.set(window.innerWidth / 20 * -8.7, 230, 20);
+              
+               
+                scene.add( mesh );
+                              }
 
 
           function removeGui(){
+            geometries.forEach(function(id){
+             // console.log(id);
+              try{ 
+              scene.getObjectByProperty('uuid', id).geometry.dispose()
+              scene.getObjectByProperty('uuid', id).material.dispose()
+              scene.remove(scene.getObjectByProperty('uuid', id))
+              } catch(e){
+               
+                console.log('Could not remove' + e )
+              }
+            })
               
-              var elem = scene.getObjectByName("gui_question", true);
-              scene.remove(elem);
-              scene.remove(scene.getObjectByName("button_a"));
-              scene.remove(scene.getObjectByName("button_b"));
-              scene.remove(scene.getObjectByName("button_c"));
-              scene.remove(scene.getObjectByName("button_d"));
-
-              scene.remove(scene.getObjectByName("question_text_a"));
-              scene.remove(scene.getObjectByName("question_text_b"));
-              scene.remove(scene.getObjectByName("question_text_c"));
-              scene.remove(scene.getObjectByName("question_text_d"));
-              scene.remove(scene.getObjectByName("question_text"));
+              dispose(scene.getObjectByName("button_a"));
+              dispose(scene.getObjectByName("button_b"));
+              dispose(scene.getObjectByName("button_c"));
+              dispose(scene.getObjectByName("button_d"));
             
+              dispose(scene.getObjectByName("question_text_a"));
+              dispose(scene.getObjectByName("question_text_b"));
+              dispose(scene.getObjectByName("question_text_c"));
+              dispose(scene.getObjectByName("question_text_d" ));
+              dispose(scene.getObjectByName("question_text"));
+              dispose(scene.getObjectByName("gui_question"));
+              
+              
+               }
 
-           
-          }
           function clearScene(){
              
               for( i = 0; i < scene.children.length; i++){ 
-                 // console.log(scene.children[i])
+
+                if(scene.children[i].geometry)
+                scene.children[i].geometry.dispose()
+
+                if(scene.children[i].material)
+                scene.children[i].material.dispose();
+                
                scene.remove(scene.children[i]); 
             }
             if(scene.children[0]){
