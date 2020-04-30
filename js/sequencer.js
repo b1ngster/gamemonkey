@@ -3,15 +3,22 @@
                 constructor() {
                     var item, _items = [], _itemsActive = [],  _itemsToRemove = [], _currentItem = 0, _totalItems = 0, _nextItem = 0, _nextItemToRemove = 0, _time = 0, _layersNeedSorting = false;
                     
+                    var input_sequence = Array();
                     var speed = 2; //units a second
                     var delta = 0;
                     var urls = [];
+                    
                     var finished = false;
                     var _video;
                     this.userInput = undefined;
-                    var itemIndex = 0;
+                    var _current = 0;
                     var countdownTimer;
-                    this.add = function (item, start, end, init, scene, ) {
+                    var state = {};
+                    var cache = {};
+                    var _processing = false;
+                  
+
+                 this.add = function (item, start, end, init, scene, ) {
 
                         item = item;
                         item.id = Math.random().toString(36).substr(2, 9);
@@ -20,13 +27,8 @@
                         item.coundown = false;
                         item._duration = end - start;
                         item._end = end;
-                        
-                        item._scene ? scene : function(){
-
-                           
-                        };
+                        item._scene  = scene
                         item._init = init;
-                        item._first = true;
                         
                         if (typeof item.init == 'function') {
                            // item.init();
@@ -46,7 +48,8 @@
                                 urls.push(value);
                              
                                 })}
-                            )
+                            );
+                            
                             
                         }
                         _items.push(item);
@@ -55,7 +58,9 @@
                       //  _itemsToRemove.sort(function (a, b) { return a.__end - b.__end; });
                         
                    
-                    };
+                    }
+                
+                
                     this.get = function () {
                         return this;
                     };
@@ -63,219 +68,252 @@
                         return urls;
                     }
 
-                    this.createItem = function(){
-                        
-                        console.log('create item')
-                        removeGui();
-                   if(video.ended){
-                    console.log('create video ended');
-                     item = _items[_currentItem];
-                    // item = Object.prototype.toString.call(item)
-                      //item = JSON.stringify(item);
-                      console.log(item);
-                        removeGui();
-                     renderButtons(item['question'], item['answers']);
-                       
-                        this._finished = false;
-                        this.userInput = false;
-                       // item._time = performance.now
-                      
-                        if(item['videos']){
-                            
-                            
-                            this._video = 'question';
-                        
-                            return video = renderVideo(item['videos'][0]['question'])
-                        }
-                         else{
-                             this._video = 'question_timed'
-                        
-                         renderVideo('videos/CountdownTimer.mp4');
-                            
-                           }
-                          item.start = performance.now();
-                       
-                        
+                    this.createItem = function(item){
 
-                         return this;
+                     
+                     try{   removeGui();
+                     }catch(e){}
+                     renderer.clear();
+                        item = _items[_currentItem];
+                        this.current = _items[_currentItem];
+                        console.log('create item' + this.current)
+                       
+                        //create item with videos
+                     if(item['videos'] ){
+
+                       var vid =  renderVideo(item['videos'][0]['question']);
+                     }else{
+                        var vid =  renderVideo('videos/CountdownTimer.mp4');
+                     }
+                      vid.play().then(function(e)
+                   {
+                       item._time = new Timer();
+                       item._time.start();
+                  
+                       console.log('question' + item['question'] )
+                     //  clearScene();
+                 renderButtons(item['question'], item['answers']);
+              
+                       console.log('video played event' +this);
+
                    }
-                    }
+                  
+                   
+                     )
+                  
+                     if(vid.ended){
+                    
+
+                       try{ 
+                         removeGui();
+                        clearScene();
+                       }catch{}
+
+
+                        var cdown = renderVideo('videos/CountdownTimer.mp4');
+                   
+                       // renderButtons(item['question'], item['answers']);
+
+                        cdown.play();
+                        cdown.addEventListener('ended', (function _func(e){
+
+                          removeGui();
+                            console.log('cdown.ended')
+                            e.target.removeEventListener("ended", _func);
+                     
+                            return this.noInput(e);
+                        }).bind(this));
+                        cdown.play()
+                        }
+                   
+                
+                      
+                   return video;
+                }
+
+
+            
+                    this.preload = function(){
+
+                        urls = Array.from(new Set(this.getUrls()));
+                        
+                        urls.forEach( function(urls){
+
+                        var preloadLink = document.createElement("link");
+
+                        
+                        preloadLink.setAttribute('rel', "preload");
+                      preloadLink.setAttribute('src', urls);
+                        preloadLink.preload = "auto";
+                        preloadLink.as = "video";
+                        document.head.appendChild(preloadLink);
+
+                        
+                         } );
+
+                        return this
+                         };
+
                     this.coundownTimer = function () {
                         this._video = 'coundown_90';
                         renderVideo('videos/CountdownTimer.mp4');
                     };
+
                     this.getItems = function () {
                         return _items;
                     };
                  
-                    this.checkTime = function(){
-                       return _time - performance.now() / 1000;
-                    }
 
                    this.increment = function(){
-                       removeGui();
+                     clearScene();
+                      removeGui();
+                      textGeo = null;
+                      console.log('remove gui called');
                   _currentItem++;
                    console.log('increment')
                     return this.createItem();
                     
                    }
-                    
-                    this.next = function (video, ...args) {
-                    
-                    
-                        if(video){
-                        if(this._video === 'Gameover'){
-                           // window.location.reload(true);
-                        }
-                        if(this.userInput === 'win'){
-                            removeGui();
-                            console.log('winner');
-                            console.log(video);
-                          this._video = 'win';
-                            
-                          renderVideo('videos/questions/lewis/questions/win.mp4');
 
-                         
-                      
-                        }
-                        if(this._video === "win"){
-
-                           //this.increment();
-                        }
-                        
-                        if(_currentItem === 0){
-                            this.createItem(item);
-                            }
-                          
-
-                      
-                  //  console.log(video.attributes)
-                        
-
-                      //  removeGui();
-                     //   
-                       
-                   
-                    } 
-                       // console.log(this.getClockTime(item))
-                      
-                      
-                      
-                        if(  this.finished(item)){
-
-                        console.log('finished is a success');
-                  //  console.log('item finished');
-                        this.createItem(item);
-                        item.first = false;
-                        }
-                
-                    }
+                   this.cachefn = function (cache, fn, args){
+                    //function memorization  
+                    //console.log(args)
+                    //json.stringify misses out functions 
+                    let key = fn.name + JSON.stringify(args);
                   
-                       //video.load(); // must call after setting/changing source
-                      // item.clock = this.clockStart();
-                       
-                     
-                      // video.play();
-                   
-                
-                   
+                  //  if( key in cache){
+                      //   return cache[key]
 
-                    this.current = function () {
-                        return item;
-                    };
-                    this.currentVideo = function () {
+                 //   }
+               //     else{
+                       let result = fn.apply(this, args);
                         
+                        cache[key] = result;
+                        console.log('playing' + cache + result);
+                        return result;
+                   // }
 
-                    };
-                    this.clockStart = function(){
-                        clock = performance.now();
+                }
+                   
+                    this.init = function(){
+
                     }
-                    this.getClockTime = function(){
-                     
-                    var t  =  item.clock;
-                 //   console.log(t)
-                      return  t
-                    }
-                    this.finished = function(){
-                     
-                       if(this._video === 'win'){
+
+
+
+             for (let index = 0; index < data.length; index++) {
+
+                for (let j = 0; j < data[0].length; j++) {
+                
+                this.add(data[index][j]);
+                // console.log(sequence);
+                 //}
+                   }
+
+                }
+                this.processing = function(){
+
+                    return _processing;
+                }
+                  /*Function checks the video before incrementing
+                      and creating the
+                  */
+                this.next = function (video, ...args) {
+                    //the first video is intro   
+                  
+                    console.log('The next function is called');
+                       //console.log(cache);
+                      item = _items[_currentItem];
                       
-                        console.log('incrementing');
-                      this.increment();
-                     this.userInput = undefined;
-                         }
+                     try{  
+                      removeGui()
+                    }catch{
+                        console.log( 'Tried clearnign gui for' +video)
 
+                    }
+                    this.createItem();
+                    // this.cachefn(cache, this.createItem, item) ;
+
+                       
+                 
+                         }
+                    
+                
+                  
+                   
+
+                 this.finished = function(){
+                        
+                        clearGui();
+                        clearScene();
+                     Object.defineProperty(HTMLMediaElement.prototype, 'playing', {
+                     get: function(){
+                return !!(this.currentTime > 0 && !this.paused && !this.ended && this.readyState > 2);
+                  }
+                  })
+                    this.increment();
+                  //  this.userInput = undefined;
+                         
+/*
                        if(this.userInput === 'win' ){
                         console.log(this._video);
-                        renderVideo('videos/questions/lewis/questions/win.mp4')
+                        renderVideo('videos/questions/lewis/questions/win.mp4');
                         this.video = "win"
-                   } else if(this.userInput === 'fail'){
-                    console.log(this._video)
-                     
+                       
+                       } else if(this.userInput === 'fail'){
+                        console.log(this._video)
+                        renderVideo('videos/fail.mp4');
+                       
                     
                        }
-                       
+                       */
                        if(this._video === 'question' && this.userInput === undefined ){
                         
                         this.video = 'countdown';
-                     video = renderVideo('videos/CountdownTimer.mp4');
+                         video = renderVideo('videos/CountdownTimer.mp4');
 
                        }
 
                      if(this.userInput === undefined  && this.video === 'countdown'){
                          console.log(this.userInput);
                          console.log('no input called')
-                  //  video.ended = (e) => {
-                  //     this.noInput()
-                  //    }
+                     video.onended = (e) => {
+                       this.noInput()
+                      }
                     }
 
-                    }
+                }
+                    
                      //return 
                           //    )
                         
                     
                     this.noInput = function (e) {
+
+
                         ////video.load();
-                        console.trace();
-                        if(this.previous = 'countdown'){
-                        this._video = 'Gameover';
-                        video.removeAttribute('src');
-                        video =  renderVideo('videos/game_over.mp4');
+                    //   e.target.removeEventListener(_func);
+                      console.log('no input game ended');
+                      removeGui();
+                        clearScene();
+                       video = renderVideo('videos/game_over.mp4')
+                       video.play();
+                      
                         video.addEventListener("ended",function _f(e){
-                       //     windows.location.reload()
-                            console.log('no Input Event:' +e)
-                       
-                            console.log('no Input function:' +_f)
+                  // window.location.reload()
+                           }
+                        );
 
-                        }
-                        )};
-                    }
-
-                    this.reload = function(){
-                        console.log('reloading')
-                        location.reload(true);
-                    }
-                    this.preload = function(){
-
-                        urls = new Set(this.getUrls());
-                       // console.log(urls);
-                        urls.forEach( value =>{
-                        var preloadLink = document.createElement("video");
-                        preloadLink.src = value;
-                        preloadLink.preload = "auto";
-                        preloadLink.style.visibility = "hidden"; 
-                        //preloadLink.as = "video";
-                        
-                        document.body.appendChild(preloadLink);
-                        })
-                        
                     };
-                    this.Load = function () {
+                    
+             this.Load = function () {
                         var data = this.getQuestions();
                         //return data;
                     };
-                    this.renderScene = function(){
+
+          this.renderScene = function(){
+
+            
                         
               videoImage = document.createElement('canvas');
               videoImage.width = 1920;
@@ -297,25 +335,59 @@
               var movieScreen = new THREE.Mesh(movieGeometry, movieMaterial);
               movieScreen.position.set(0, 10, 0);
               scene.add(movieScreen);
+
                     }
-                
-                }
             
-
-            handleClick(handle){
-
-                this.userInput = handle;
-                if(handle === this.current().correct){
-                
-                    console.log('correct');
-                    this.userInput = 'win'
-                   // this.next();
-                   this.next();
-                  // this.renderVideo('videos/questions/lewis/questions/win.mp4')
                     
+              this.input_sequence = function (){
+
+                return input_sequence;
+              }  
+                
+                
+           
+
+            this.option = function(handle){
+              //video.paus
+                this.userInput = handle;
+                if(handle === this.current.correct){
+                
+                    input_sequence.push('win');
+                    this.increment();
+                    this.userInput = 'win';
+
+                 removeGui();
+            
+                  video = renderVideo('videos/win.mp4');
+                    video.play();
+                    //clearScene();
+                   // this.next();
                
                 }else{
-                    renderVideo('videos/questions/lewis/questions/fail.mp4')
+
+                   /* HANDLE LOOSE */
+                  
+                  
+                  input_sequence.push('loose');
+                 
+                  console.log('fail video should play');
+                //  video.pause();
+                   video =  renderVideo('videos/fail.mp4');
+                   video.play();
+               //   this.next();
+                 
+                 
+                  
+                  if(input_sequence.find(()=>'loose').length == 3){
+                   console.log('more than three')
+                   video =  renderVideo('videos/game_over.mp4');
+                      video.play();
+                      Location.reload;
+                  }
+             
                 }
+               
             }
-            }
+        
+       }
+     }
